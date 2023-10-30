@@ -1,0 +1,17 @@
+@import './base.css';
+
+#app {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 1em;
+    gap: 20px; /* Ajusta este valor para controlar el espacio entre los botones */
+    width: 100%;
+    max-width: 800px;
+}
