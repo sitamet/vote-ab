@@ -27,6 +27,7 @@ function sendClickEvent() {
 <style scoped>
 
 .huge {
+  background-color: rgba(10, 10, 10, 0.2);
   font-size: 14vw;
   font-weight: bold;
   padding: 1em 1vw;
@@ -34,6 +35,10 @@ function sendClickEvent() {
   transition: all 0.3s ease;
   cursor: pointer;
   border-radius: 10vw;
+}
+
+.disabled {
+  color: #efefef;
 }
 
 @media (min-width: 1000px) {

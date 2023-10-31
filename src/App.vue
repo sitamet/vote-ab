@@ -9,16 +9,16 @@ if (!localStorage.getItem('uniqueId')) {
 
 const state = reactive({
   clientId: localStorage.getItem('uniqueId'),
-  myVote: '?',
   connected: false,
-  results: []
+  myVotes: {},
+  results: {},
+  connectedUsers: 2,
+  currentSlide: 'default'
 });
 
 provide('appState', state);
 
-const SOCKET_URL = 'http://0.0.0.0:8090';
-
-const socket = io(SOCKET_URL, { query: { clientId: state.clientId } });
+const socket = io(import.meta.env.VITE_VOTE_AB_SERVER, { query: { clientId: state.clientId } });
 
 socket.connect();
 
@@ -26,15 +26,23 @@ socket.on("connect", () => {
   state.connected = true;
 });
 
-socket.on("vote-ab-results", results => {
-  console.log('vote-ab-results', results);
+socket.on("vote-ab-results", ({ results, connectedUsers, currentSlide }) => {
   state.results = results;
+  state.connectedUsers = connectedUsers;
+  state.currentSlide = currentSlide;
 });
 
 
-watch(() => state.myVote, (newValue, oldValue) => {
-  if (newValue !== oldValue) {
-    socket.timeout(5000).emit("vote-ab-done", newValue);
+socket.on("vote-ab-reset", ({ results, currentSlide }) => {
+  state.results = results;
+  state.currentSlide = currentSlide;
+  state.myVotes[currentSlide] = '';
+});
+
+
+watch(() => state.myVotes[state.currentSlide], (newVote, oldVote) => {
+  if (newVote && newVote !== oldVote) {
+    socket.timeout(5000).emit("vote-ab-done", newVote);
   }
 });
 
@@ -47,13 +55,9 @@ function generateUniqueId() {
 }
 
 
-function handleVoteEmit(payload) {
-  console.log('handleVoteEmit', payload)
-}
 </script>
 
 <template>
-  <div @vote-emit="handleVoteEmit"></div>
   <router-view/>
 </template>
 
