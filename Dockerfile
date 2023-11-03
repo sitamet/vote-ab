@@ -16,6 +16,8 @@ COPY . .
 # Construir la aplicación para producción
 ARG VITE_VOTE_AB_SERVER
 ENV VITE_VOTE_AB_SERVER $VITE_VOTE_AB_SERVER
+ENV PORT $PORT
+
 RUN npm run build
 
 # Etapa de producción con Nginx
