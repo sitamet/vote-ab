@@ -24,8 +24,5 @@ FROM nginx:stable-alpine as production-stage
 # Copiar el build de Vue al directorio de Nginx
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-# Exponer el puerto 80
-EXPOSE 80
-
-# Comando para iniciar Nginx y mantener el contenedor en ejecución
-CMD ["nginx", "-g", "daemon off;"]
+# Reemplazar el puerto predeterminado de Nginx por el puerto que Heroku asigna
+CMD sed -i 's/listen       80;/listen       $PORT;/' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
