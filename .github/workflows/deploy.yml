@@ -19,7 +19,7 @@ jobs:
 
     - name: Build and push
       env:
-        HEROKU_APP_NAME: "tu-nombre-de-aplicacion-en-heroku"
+        HEROKU_APP_NAME: "vote-ab"
         VITE_VOTE_AB_SERVER: ${{ secrets.VITE_VOTE_AB_SERVER }}
       run: |
         docker build --build-arg VITE_VOTE_AB_SERVER=${VITE_VOTE_AB_SERVER} -t registry.heroku.com/${HEROKU_APP_NAME}/web .
