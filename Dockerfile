@@ -25,6 +25,9 @@ FROM nginx:stable-alpine as production-stage
 
 # Copiar el build de Vue al directorio de Nginx
 COPY --from=build-stage /app/dist /usr/share/nginx/html
+COPY docker_entrypoint.sh /docker_entrypoint.sh
+RUN chmod +x /docker_entrypoint.sh
+
 
 # Reemplazar el puerto predeterminado de Nginx por el puerto que Heroku asigna
-CMD sed -i 's/listen       80;/listen       $PORT;/' /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'
+CMD ["/docker_entrypoint.sh"]
